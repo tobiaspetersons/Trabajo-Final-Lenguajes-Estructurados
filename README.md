@@ -32,8 +32,6 @@ Este sistema es un control de stock para llevar el control del mismo en un empre
 
 - Exportar el listado de prendas a un archivo (por ejemplo, CSV).
 
-## Funcionalidades adicionales sugeridas
+### Otras funcionalidades
 
-- Permitir la actualización masiva de precios o stock.
 - Agregar historial de movimientos de stock (entradas y salidas).
-- Implementar filtros avanzados (por rango de precios, por estado de baja, etc).
