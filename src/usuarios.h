@@ -8,4 +8,5 @@ typedef struct
     int estado; /* 0: inactivo, 1:activo */
 }Usuario;
 
+void registrarUsuario(const char* user, const char* pass);
 #endif
