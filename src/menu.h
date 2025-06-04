@@ -5,5 +5,5 @@
 void menuPrincipal();
 void menuUsuarios();
 void menuPrendas();
-
+void menuConsultas();
 #endif

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include "prendas.h"
 #include "utils.h"
 
 int guardarLinea(const char *ruta, const char *linea) {
@@ -23,22 +22,46 @@ int leerLineas(const char *ruta, char lineas[][256], int maxLineas) {
     fclose(f);
     return i; // cantidad de líneas leídas
 }
-void listarPrendas(int estado) {
-    char lineas[100][256];
-    int cantidad = leerLineas("data/prendas.txt", lineas, 100);
 
-    if (estado == 1) {
-        printf("\n--- Prendas activas ---\n");
-    } else {
-        printf("\n--- Prendas inactivas ---\n");
-    }
-    printf("Codigo | Nombre | Color | Talle | Precio | Stock\n");
-    for (int i = 0; i < cantidad; i++) {
-        Prenda p;
-        sscanf(lineas[i], "%d,%49[^,],%29[^,],%9[^,],%f,%d,%d",
-               &p.codigo, p.nombre, p.color, p.talle, &p.precio, &p.stock, &p.estado);
-        if (p.estado == estado) {
-            printf("%d | %s | %s | %s | %.2f | %d\n", p.codigo, p.nombre, p.color, p.talle, p.precio, p.stock);
+#include <stdio.h>
+#include <string.h>
+#include "utils.h"
+
+void inicializarArchivos() {
+    FILE *f;
+    int crearAdmin = 0;
+
+    // verifica y crea data/usuarios.txt si no existe
+    f = fopen("data/usuarios.txt", "r");
+    if (f == NULL) {
+        f = fopen("data/usuarios.txt", "w");
+        if (f != NULL) {
+            fprintf(f, "admin,admin,1,1\n");
+            fclose(f);
+            crearAdmin = 1;
         }
+    } else {
+        fclose(f);
     }
+
+    // verifica y crea data/prendas.txt si no existe
+    f = fopen("data/prendas.txt", "r");
+    if (f == NULL) {
+        f = fopen("data/prendas.txt", "w");
+        if (f != NULL) fclose(f);
+    } else {
+        fclose(f);
+    }
+
+    if (crearAdmin) {
+        printf("\n------------------------------------------\n");
+        printf("Primera ejecución: usuario admin creado.\n");
+        printf("Usuario: admin\nContraseña: admin\n");
+        printf("------------------------------------------\n\n");
+    }
+}
+
+void limpiarBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }

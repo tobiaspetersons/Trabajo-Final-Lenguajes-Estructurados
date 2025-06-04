@@ -1,8 +1,13 @@
 #include <stdio.h>
-#include <menu.h>
+#include "menu.h"   
+#include "utils.h"
+#include "auth.h"
 
 int main()
 {
+
+    inicializarArchivos();
+
     if (login())
     {
         menuPrincipal();
