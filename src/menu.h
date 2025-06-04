@@ -5,5 +5,5 @@
 void menuPrincipal();
 void menuUsuarios();
 void menuPrendas();
-void consultarStock();
+
 #endif

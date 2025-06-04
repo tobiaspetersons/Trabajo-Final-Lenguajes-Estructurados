@@ -5,8 +5,8 @@ typedef struct
 {
     char user[50];
     char pass[50];
-    int estado; /* 0: inactivo, 1:activo */
+    int estado; /* 0: inactivo, 1: activo */
 }Usuario;
 
-void registrarUsuario(const char* user, const char* pass);
+void registrarUsuario();
 #endif

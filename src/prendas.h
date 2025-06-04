@@ -3,15 +3,19 @@
 
 typedef struct
 {
-    int id; /*codigo imagen*/
-    char nombre[100];
-    char color[100];
-    int talle;
-    char categoria[50];
+    int codigo;
+    char nombre[50];
+    char color[30];
+    char talle[10];
     float precio;
     int stock;
-    int estado; /* 0: inactivo, 1:activo */
-}Prenda;
+    int estado; // 1: activo, 0: inactivo
+} Prenda;
+
+void agregarPrenda();
+void inhabilitarPrenda();
+void habilitarPrenda();
+void modificarStockPrenda();
 
 
 #endif
