@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "utils.h"
 
 int guardarLinea(const char *ruta, const char *linea) {
@@ -10,11 +11,11 @@ int guardarLinea(const char *ruta, const char *linea) {
     return 1;
 }
 
-int leerLineas(const char *ruta, char lineas[][256], int maxLineas) {
+int leerLineas(const char *ruta, char lineas[][BUFFER_LINEA], int maxLineas) {
     FILE *f = fopen(ruta, "r");
     if (f == NULL) return 0;
     int i = 0;
-    while (fgets(lineas[i], 256, f) && i < maxLineas) {
+    while (fgets(lineas[i], BUFFER_LINEA, f) && i < maxLineas) {
         // Elimina el salto de línea al final
         lineas[i][strcspn(lineas[i], "\n")] = 0;
         i++;
@@ -22,10 +23,6 @@ int leerLineas(const char *ruta, char lineas[][256], int maxLineas) {
     fclose(f);
     return i; // cantidad de líneas leídas
 }
-
-#include <stdio.h>
-#include <string.h>
-#include "utils.h"
 
 void inicializarArchivos() {
     FILE *f;
@@ -64,4 +61,12 @@ void inicializarArchivos() {
 void limpiarBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void limpiarConsola() {
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
 }

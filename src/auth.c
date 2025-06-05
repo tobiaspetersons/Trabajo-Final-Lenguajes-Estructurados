@@ -5,18 +5,22 @@
 #include "usuarios.h"
 
 int usuarioActualRol = 0;
+char usuarioActual[50] = "";
 
 int login() {
+    limpiarConsola();
     char user[50], pass[50];
-    char lineas[100][256];
+    char lineas[100][BUFFER_LINEA];
     int cantidad;
     int intentos = 0;
 
     while (intentos < 3) {
         printf("Usuario: ");
         scanf("%49s", user);
+        limpiarBuffer();
         printf("Contraseña: ");
         scanf("%49s", pass);
+        limpiarBuffer();
 
         cantidad = leerLineas("data/usuarios.txt", lineas, 100);
 
@@ -25,7 +29,10 @@ int login() {
             sscanf(lineas[i], "%49[^,],%49[^,],%d,%d", u.user, u.pass, &u.estado, &u.rol);
             if (u.estado == 1 && strcmp(u.user, user) == 0 && strcmp(u.pass, pass) == 0) {
                 usuarioActualRol = u.rol;
+                strcpy(usuarioActual, user);
                 printf("Login exitoso.\n");
+                printf("\nPresione ENTER para continuar...");
+                getchar();
                 return 1;
             }
         }

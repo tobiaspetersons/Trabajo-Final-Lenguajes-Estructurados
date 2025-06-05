@@ -3,10 +3,12 @@
 #include "usuarios.h"
 #include "prendas.h"
 #include "auth.h"
+#include "utils.h"
 
 void menuPrincipal() {
     int opcion;
     do {
+        limpiarConsola();
         printf("\n--- Menú Principal ---\n");
         if (usuarioActualRol == 1) {
             printf("1. Gestión de usuarios\n");
@@ -20,6 +22,7 @@ void menuPrincipal() {
         }
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
+        limpiarBuffer();
 
         if (usuarioActualRol == 1) {
             switch (opcion) {
@@ -43,6 +46,7 @@ void menuPrincipal() {
 void menuUsuarios() {
     int opcion;
     do {
+        limpiarConsola();
         printf("\n--- Gestión de Usuarios ---\n");
         printf("1. Registrar nuevo usuario\n");
         printf("2. Inhabilitar usuario\n");
@@ -51,25 +55,15 @@ void menuUsuarios() {
         printf("5. Volver\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
+        limpiarBuffer();
 
         switch (opcion) {
-            case 1:
-                registrarUsuario();
-                break;
-            case 2:
-                inhabilitarUsuario();
-                break;
-            case 3:
-                listarUsuarios(1); // 1 = activos
-                break;
-            case 4:
-                listarUsuarios(0); // 0 = inactivos
-                break;
-            case 5:
-                printf("Volviendo al menú principal...\n");
-                break;
-            default:
-                printf("Opción inválida.\n");
+            case 1: registrarUsuario(); break;
+            case 2: inhabilitarUsuario(); break;
+            case 3: listarUsuarios(1); break; // 1 = activos
+            case 4: listarUsuarios(0); break; // 0 = inactivos
+            case 5: printf("Volviendo al menú principal...\n"); break;
+            default: printf("Opción inválida.\n");
         }
     } while (opcion != 5);
 }
@@ -78,40 +72,32 @@ void menuPrendas()
 {
     int opcion;
     do {
+        limpiarConsola();
         printf("\n--- Gestión de Prendas ---\n");
         printf("1. Agregar prenda\n");
         printf("2. Dar de baja o eliminar prenda\n");
         printf("3. Habilitar prenda\n");
-        printf("4. Modificar prenda (stock o precio)\n");
+        printf("4. Modificar prenda\n");
         printf("5. Volver\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
+        limpiarBuffer();
 
         switch (opcion) {
-            case 1:
-                agregarPrenda();
-                break;
-            case 2:
-                bajaPrenda();
-                break;
-            case 3:
-                habilitarPrenda();
-                break;
-            case 4:
-                modificarPrenda();
-                break;
-            case 5:
-                printf("Volviendo al menú principal...\n");
-                break;
-            default:
-                printf("Opción inválida.\n");
+            case 1: agregarPrenda(); break;
+            case 2: bajaPrenda(); break;
+            case 3: habilitarPrenda(); break;
+            case 4: modificarPrenda(); break;
+            case 5: printf("Volviendo al menú principal...\n"); break;
+            default: printf("Opción inválida.\n");
         }
-    } while (opcion != 7);
+    } while (opcion != 5);
 }
 
 void menuConsultas() {
     int opcion;
     do {
+        limpiarConsola();
         printf("\n--- Consultas y Reportes ---\n");
         printf("1. Listar prendas activas\n");
         printf("2. Listar prendas inactivas\n");
@@ -122,31 +108,17 @@ void menuConsultas() {
         printf("7. Volver\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
+        limpiarBuffer();
 
         switch (opcion) {
-            case 1:
-                listarPrendas(1); // 1 = activas
-                break;
-            case 2:
-                listarPrendas(0); // 0 = inactivas
-                break;
-            case 3:
-                consultarStock();
-                break;
-            case 4:
-                buscarPrendaPorCodigo();
-                break;
-            case 5:
-                filtrarPrendas();
-                break;
-            case 6:
-                reporteInventario();
-                break;
-            case 7:
-                printf("Volviendo...\n");
-                break;
-            default:
-                printf("Opción inválida.\n");
+            case 1: listarPrendas(1); break; // 1 = activas
+            case 2: listarPrendas(0); break; // 0 = inactivas
+            case 3: consultarStock(); break;
+            case 4: buscarPrendaPorCodigo(); break;
+            case 5: filtrarPrendas(); break;
+            case 6: reporteInventario(); break;
+            case 7: printf("Volviendo...\n"); break;
+            default: printf("Opción inválida.\n");
         }
     } while (opcion != 7);
 }

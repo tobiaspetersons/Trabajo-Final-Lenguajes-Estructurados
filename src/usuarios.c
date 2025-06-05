@@ -4,13 +4,17 @@
 #include "utils.h"
 #include "auth.h"
 
+extern char usuarioActual[50];
+
 void registrarUsuario() {
+    limpiarConsola();
     char user[50], pass[50], linea[120];
-    char lineas[100][256];
+    char lineas[100][BUFFER_LINEA];
     int cantidad, existe = 0, rol = 0;
 
     printf("Ingrese nombre de usuario: ");
     scanf("%49s", user);
+    limpiarBuffer();
 
     cantidad = leerLineas("data/usuarios.txt", lineas, 100);
     for (int i = 0; i < cantidad; i++) {
@@ -26,7 +30,6 @@ void registrarUsuario() {
         printf("El usuario ya existe y está activo.\n");
         return;
     }
-
 
     do {
         printf("Ingrese contraseña (mínimo 8 caracteres, una mayúscula, una minúscula y un número): ");
@@ -50,16 +53,28 @@ void registrarUsuario() {
     sprintf(linea, "%s,%s,1,%d", user, pass, rol);
     guardarLinea("data/usuarios.txt", linea);
     printf("Usuario registrado con éxito.\n");
+    printf("\nPresione ENTER para continuar...");
+    limpiarBuffer();
+    getchar();
 }
 
 void inhabilitarUsuario() {
+    limpiarConsola();
     char nombre[50];
-    char lineas[100][256];
+    char lineas[100][BUFFER_LINEA];
     int cantidad, encontrado = 0;
 
     printf("Ingrese el nombre de usuario a inhabilitar: ");
     scanf("%49s", nombre);
+    limpiarBuffer();
 
+    if (strcmp(nombre, usuarioActual) == 0) {
+    printf("No puedes inhabilitar tu propio usuario.\n");
+    printf("\nPresione ENTER para continuar...");
+    limpiarBuffer();
+    getchar();
+    return;
+}
     cantidad = leerLineas("data/usuarios.txt", lineas, 100);
 
     for (int i = 0; i < cantidad; i++) {
@@ -86,7 +101,8 @@ void inhabilitarUsuario() {
 }
 
 void listarUsuarios(int estado) {
-    char lineas[100][256];
+    limpiarConsola();
+    char lineas[100][BUFFER_LINEA];
     int cantidad = leerLineas("data/usuarios.txt", lineas, 100);
 
     if (estado == 1) {
@@ -94,7 +110,10 @@ void listarUsuarios(int estado) {
     } else {
         printf("\n--- Usuarios inactivos ---\n");
     }
-    printf("Usuario | Contraseña | Rol\n");
+
+    printf("%-15s | %-15s | %-8s\n", "Usuario", "Contraseña", "Rol");
+    printf("--------------- | --------------- | --------\n");
+
     for (int i = 0; i < cantidad; i++) {
         char user[50], pass[50];
         int est, rol;
@@ -104,7 +123,10 @@ void listarUsuarios(int estado) {
             int len = strlen(pass);
             for (int j = 0; j < len; j++) passOculta[j] = '*';
             passOculta[len] = '\0';
-            printf("%s | %s | %s\n", user, passOculta, rol == 1 ? "ADMIN" : "USUARIO");
+            printf("%-15s | %-15s | %-8s\n", user, passOculta, rol == 1 ? "ADMIN" : "USUARIO");
         }
     }
+    printf("\nPresione ENTER para continuar...");
+    limpiarBuffer();
+    getchar();
 }
