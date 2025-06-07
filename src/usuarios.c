@@ -41,7 +41,7 @@ void registrarUsuario() {
 
     do {
         printf("¿El usuario será administrador? (1=Sí, 0=No): ");
-        if (scanf("%d", &rol) != 1) {
+        if (scanf("%d", &rol) != 1) { /*aca el scanf si lee un entero correctamente devuelve 1*/
             limpiarBuffer(); 
             rol = -1;
         }

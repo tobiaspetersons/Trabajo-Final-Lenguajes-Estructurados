@@ -36,12 +36,9 @@ Este sistema es un control de stock para un emprendimiento de ropa, desarrollado
 - **Archivos de texto** en la carpeta `data/`:
   - `usuarios.txt`: usuarios registrados.
   - `prendas.txt`: prendas en stock.
-  - `movimientos.txt`: historial de movimientos (opcional, recomendado).
 - **Estructuras en C**:
   - `Prenda`: todos los campos de la prenda.
   - `Usuario`: todos los campos del usuario.
-  - `Movimiento`: (opcional) para registrar historial de acciones.
-
 ---
 
 ## Funcionalidades principales
