@@ -123,11 +123,9 @@ Este sistema es un control de stock para un emprendimiento de ropa, desarrollado
     usuarios.c/h
     auth.c/h
     utils.c/h
-    movimientos.c/h (opcional)
     ...
 /data
     usuarios.txt
     prendas.txt
-    movimientos.txt (opcional)
 
 ---
