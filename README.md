@@ -39,6 +39,7 @@ Este sistema es un control de stock para un emprendimiento de ropa, desarrollado
 - **Estructuras en C**:
   - `Prenda`: todos los campos de la prenda.
   - `Usuario`: todos los campos del usuario.
+  
 ---
 
 ## Funcionalidades principales

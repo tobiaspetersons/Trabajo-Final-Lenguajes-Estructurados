@@ -50,6 +50,15 @@ void inicializarArchivos() {
         fclose(f);
     }
 
+    // verifica y crea data/movimientos.txt si no existe
+    f = fopen("data/movimientos.txt", "r");
+    if (f == NULL) {
+        f = fopen("data/movimientos.txt", "w");
+        if (f != NULL) fclose(f);
+    } else {
+        fclose(f);
+    }
+
     if (crearAdmin) {
         printf("\n------------------------------------------\n");
         printf("Primera ejecución: usuario admin creado.\n");

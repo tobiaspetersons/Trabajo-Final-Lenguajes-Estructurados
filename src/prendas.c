@@ -2,6 +2,10 @@
 #include <string.h>
 #include "prendas.h"
 #include "utils.h"
+#include "movimientos.h"
+#include "auth.h"
+
+extern char usuarioActual[50];
 
 void listarPrendas(int estado) {
     limpiarConsola();
@@ -43,12 +47,15 @@ void agregarPrenda() {
 
         int cantidad = leerLineas("data/prendas.txt", lineas, 100);
 
-        // Asignar código autoincremental (máximo código + 1)
+        // asignar código autoincremental (máximo código + 1)
         int maxCodigo = 0;
         for (int i = 0; i < cantidad; i++) {
             int cod;
             sscanf(lineas[i], "%d,%*[^,],%*[^,],%*[^,],%*f,%*f,%*d,%*d,%*[^,]", &cod);
-            if (cod > maxCodigo) maxCodigo = cod;
+            if (cod > maxCodigo) 
+            {
+                maxCodigo = cod;
+            }
         }
         p.codigo = maxCodigo + 1;
 
@@ -87,6 +94,8 @@ void agregarPrenda() {
         sprintf(linea, "%d,%s,%s,%s,%.2f,%.2f,%d,%d,%s", p.codigo, p.nombre, p.color, p.talle, p.costo, p.precio, p.stock, p.estado, p.foto);
         guardarLinea("data/prendas.txt", linea);
         printf("Prenda agregada con éxito. Código asignado: %d\n", p.codigo);
+        DatosMovimiento datos = {p.codigo, "ALTA", p.stock, usuarioActual, "Alta de prenda"};
+        agregarMovimiento(datos);
 
         printf("¿Desea agregar otra prenda? (s/n): ");
         scanf(" %c", &opcion); 
@@ -156,9 +165,13 @@ void bajaPrenda() {
                 sprintf(lineas[i], "%d,%s,%s,%s,%.2f,%.2f,%d,0,%s", p.codigo, p.nombre, p.color, p.talle, p.costo, p.precio, p.stock, p.foto);
                 fprintf(f, "%s\n", lineas[i]);
                 printf("Prenda inhabilitada (baja lógica) con éxito.\n");
+                DatosMovimiento datos = {p.codigo, "BAJA", 0, usuarioActual, "Baja lógica de prenda"};
+                agregarMovimiento(datos);
             } else if (tipoBaja == 'f' || tipoBaja == 'F') {
                 // baja física: no la escribe, la elimina
                 printf("Prenda eliminada definitivamente (baja física).\n");
+                DatosMovimiento datos = {p.codigo, "ELIMINACION", 0, usuarioActual, "Baja física de prenda"};
+                agregarMovimiento(datos);
             } else {
                 // Opción inválida, vuelve a escribir la línea original
                 fprintf(f, "%s\n", lineas[i]);
@@ -230,6 +243,8 @@ void habilitarPrenda() {
         }
         fclose(f);
         printf("Prenda habilitada con éxito.\n");
+        DatosMovimiento datos = {codigo, "HABILITACION", 0, usuarioActual, "Prenda habilitada"};
+        agregarMovimiento(datos);
     } else {
         printf("Prenda no encontrada o ya activa.\n");
     }
@@ -240,10 +255,9 @@ void habilitarPrenda() {
 }
 
 void modificarPrenda() {
-    limpiarConsola();
-    int codigo, cantidad, encontrado = 0;
+    int codigo, opcion, cantidad;
     char lineas[100][BUFFER_LINEA];
-    int opcion;
+    cantidad = leerLineas("data/prendas.txt", lineas, 100);
 
     listarPrendas(1);
 
@@ -251,51 +265,51 @@ void modificarPrenda() {
     scanf("%d", &codigo);
     limpiarBuffer();
 
-    cantidad = leerLineas("data/prendas.txt", lineas, 100);
+    int encontrada = 0;
 
     for (int i = 0; i < cantidad; i++) {
         Prenda p;
         sscanf(lineas[i], "%d,%49[^,],%29[^,],%9[^,],%f,%f,%d,%d,%29s",
                &p.codigo, p.nombre, p.color, p.talle, &p.costo, &p.precio, &p.stock, &p.estado, p.foto);
+
         if (p.codigo == codigo && p.estado == 1) {
+            encontrada = 1;
             printf("¿Qué desea modificar?\n");
-            printf("1. Nombre\n");
-            printf("2. Color\n");
-            printf("3. Talle\n");
-            printf("4. Stock\n");
-            printf("5. Costo\n");
-            printf("6. Precio\n");
-            printf("7. Foto\n");
-            printf("Ingrese opción: ");
+            printf("1. Nombre\n2. Color\n3. Talle\n4. Stock\n5. Costo\n6. Precio\n7. Foto\n");
+            printf("Ingrese una opción: ");
             scanf("%d", &opcion);
             limpiarBuffer();
 
+            DatosMovimiento datos;
+
             switch (opcion) {
                 case 1:
-                    printf("Nombre actual: %s\n", p.nombre);
-                    printf("Ingrese el nuevo nombre: ");
-                    limpiarBuffer();
+                    printf("Nombre actual: %s\nNuevo nombre: ", p.nombre);
                     fgets(p.nombre, sizeof(p.nombre), stdin);
                     p.nombre[strcspn(p.nombre, "\n")] = 0;
+                    if (strlen(p.nombre) == 0) strcpy(p.nombre, "SinNombre");
+                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de nombre"};
+                    agregarMovimiento(datos);
                     break;
                 case 2:
-                    printf("Color actual: %s\n", p.color);
-                    printf("Ingrese el nuevo color: ");
-                    limpiarBuffer();
+                    printf("Color actual: %s\nNuevo color: ", p.color);
                     fgets(p.color, sizeof(p.color), stdin);
                     p.color[strcspn(p.color, "\n")] = 0;
+                    if (strlen(p.color) == 0) strcpy(p.color, "SinColor");
+                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de color"};
+                    agregarMovimiento(datos);
                     break;
                 case 3:
-                    printf("Talle actual: %s\n", p.talle);
-                    printf("Ingrese el nuevo talle: ");
-                    limpiarBuffer();
+                    printf("Talle actual: %s\nNuevo talle: ", p.talle);
                     fgets(p.talle, sizeof(p.talle), stdin);
                     p.talle[strcspn(p.talle, "\n")] = 0;
+                    if (strlen(p.talle) == 0) strcpy(p.talle, "SinTalle");
+                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de talle"};
+                    agregarMovimiento(datos);
                     break;
                 case 4: {
-                    int nuevoStock;
-                    printf("Stock actual: %d\n", p.stock);
-                    printf("Ingrese el nuevo stock: ");
+                    int nuevoStock, stockAnterior = p.stock;
+                    printf("Stock actual: %d\nNuevo stock: ", p.stock);
                     scanf("%d", &nuevoStock);
                     limpiarBuffer();
                     if (nuevoStock < 0) {
@@ -303,65 +317,58 @@ void modificarPrenda() {
                         return;
                     }
                     p.stock = nuevoStock;
+                    int diferencia = nuevoStock - stockAnterior;
+                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", diferencia, usuarioActual, "Modificación de stock"};
+                    agregarMovimiento(datos);
                     break;
                 }
-                case 5: {
-                    float nuevoCosto;
-                    printf("Costo actual: %.2f\n", p.costo);
-                    printf("Ingrese el nuevo costo: $");
-                    scanf("%f", &nuevoCosto);
+                case 5:
+                    printf("Costo actual: %.2f\nNuevo costo: ", p.costo);
+                    scanf("%f", &p.costo);
                     limpiarBuffer();
-                    if (nuevoCosto < 0) {
-                        printf("El costo debe ser un valor positivo.\n");
-                        return;
-                    }
-                    p.costo = nuevoCosto;
+                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de costo"};
+                    agregarMovimiento(datos);
                     break;
-                }
-                case 6: {
-                    float nuevoPrecio;
-                    printf("Precio actual: %.2f\n", p.precio);
-                    printf("Ingrese el nuevo precio: $");
-                    scanf("%f", &nuevoPrecio);
+                case 6:
+                    printf("Precio actual: %.2f\nNuevo precio: ", p.precio);
+                    scanf("%f", &p.precio);
                     limpiarBuffer();
-                    if (nuevoPrecio < 0) {
-                        printf("El precio debe ser un valor positivo.\n");
-                        return;
-                    }
-                    p.precio = nuevoPrecio;
+                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de precio"};
+                    agregarMovimiento(datos);
                     break;
-                }
                 case 7:
-                    printf("Foto actual: %s\n", p.foto);
-                    printf("Ingrese el nuevo nombre de la foto: ");
-                    scanf("%29s", p.foto);
-                    limpiarBuffer();
+                    printf("Foto actual: %s\nNueva foto: ", p.foto);
+                    fgets(p.foto, sizeof(p.foto), stdin);
+                    p.foto[strcspn(p.foto, "\n")] = 0;
+                    if (strlen(p.foto) == 0) strcpy(p.foto, "SinFoto");
+                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de foto"};
+                    agregarMovimiento(datos);
                     break;
                 default:
                     printf("Opción inválida.\n");
                     return;
             }
 
-            sprintf(lineas[i], "%d,%s,%s,%s,%.2f,%.2f,%d,%d,%s", p.codigo, p.nombre, p.color, p.talle, p.costo, p.precio, p.stock, p.estado, p.foto);
-            encontrado = 1;
-            break;
+            // Actualiza la línea modificada
+            sprintf(lineas[i], "%d,%s,%s,%s,%.2f,%.2f,%d,%d,%s",
+                    p.codigo, p.nombre, p.color, p.talle, p.costo, p.precio, p.stock, p.estado, p.foto);
+
+            // Sobrescribe el archivo con todas las líneas actualizadas
+            FILE *f = fopen("data/prendas.txt", "w");
+            for (int j = 0; j < cantidad; j++) {
+                guardarLinea("data/prendas.txt", lineas[j]);
+            }
+            if (f) fclose(f);
+
+            printf("Prenda modificada con éxito.\n");
+            return;
         }
     }
-
-    if (encontrado) {
-        FILE *f = fopen("data/prendas.txt", "w");
-        for (int i = 0; i < cantidad; i++) {
-            fprintf(f, "%s\n", lineas[i]);
-        }
-        fclose(f);
-        printf("Prenda modificada con éxito.\n");
-        printf("\nPresione ENTER para continuar...");
-        limpiarBuffer();
-        getchar();
-    } else {
-        printf("Prenda no encontrada o ya inactiva.\n");
+    if (!encontrada) {
+        printf("Prenda no encontrada o inactiva.\n");
     }
 }
+
 
 void buscarPrendaPorCodigo() {
     limpiarConsola();

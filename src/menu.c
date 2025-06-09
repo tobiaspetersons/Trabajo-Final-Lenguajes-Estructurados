@@ -4,6 +4,7 @@
 #include "prendas.h"
 #include "auth.h"
 #include "utils.h"
+#include "movimientos.h"
 
 void menuPrincipal() {
     int opcion;
@@ -105,20 +106,22 @@ void menuConsultas() {
         printf("4. Buscar prenda por código\n");
         printf("5. Filtrar prendas\n");
         printf("6. Consultar total de prendas y costos\n");
-        printf("7. Volver\n");
+        printf("7. Ver historial de movimientos\n"); 
+        printf("8. Volver\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
         limpiarBuffer();
 
         switch (opcion) {
-            case 1: listarPrendas(1); break; // 1 = activas
-            case 2: listarPrendas(0); break; // 0 = inactivas
+            case 1: listarPrendas(1); break;
+            case 2: listarPrendas(0); break;
             case 3: consultarStock(); break;
             case 4: buscarPrendaPorCodigo(); break;
             case 5: filtrarPrendas(); break;
             case 6: reporteInventario(); break;
-            case 7: printf("Volviendo...\n"); break;
+            case 7: listarMovimientos(); break; 
+            case 8: printf("Volviendo...\n"); break;
             default: printf("Opción inválida.\n");
         }
-    } while (opcion != 7);
+    } while (opcion != 8);
 }
