@@ -10,3 +10,4 @@
 2,ALTA,1,admin,2025-06-11 18:26,Alta de prenda
 2,ELIMINACION,0,admin,2025-06-11 18:26,Baja física de prenda
 3,ALTA,3,admin,2025-06-12 11:42,Alta de prenda
+1,ELIMINACION,0,sofi,2025-06-12 19:01,Baja física de prenda

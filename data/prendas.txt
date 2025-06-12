@@ -1,3 +1,2 @@
-1,Blusa,Azul,Unico,24555.00,32489234.00,1,1,imgjdsk
 2,Baby tee hola,negro,unico,2000.00,5000.00,1,1,img
 3,Baby tee Negra,negro,unic,2000.00,5000.00,3,1,imgkf
