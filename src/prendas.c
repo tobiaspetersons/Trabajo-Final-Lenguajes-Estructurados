@@ -94,8 +94,8 @@ void agregarPrenda() {
         sprintf(linea, "%d,%s,%s,%s,%.2f,%.2f,%d,%d,%s", p.codigo, p.nombre, p.color, p.talle, p.costo, p.precio, p.stock, p.estado, p.foto);
         guardarLinea("data/prendas.txt", linea);
         printf("Prenda agregada con éxito. Código asignado: %d\n", p.codigo);
-        DatosMovimiento datos = {p.codigo, "ALTA", p.stock, usuarioActual, "Alta de prenda"};
-        agregarMovimiento(datos);
+        Movimiento mov = {p.codigo, "ALTA", p.stock, usuarioActual, "", "Alta de prenda"};
+        registrarMovimiento(mov);
 
         printf("¿Desea agregar otra prenda? (s/n): ");
         scanf(" %c", &opcion); 
@@ -165,15 +165,15 @@ void bajaPrenda() {
                 sprintf(lineas[i], "%d,%s,%s,%s,%.2f,%.2f,%d,0,%s", p.codigo, p.nombre, p.color, p.talle, p.costo, p.precio, p.stock, p.foto);
                 fprintf(f, "%s\n", lineas[i]);
                 printf("Prenda inhabilitada (baja lógica) con éxito.\n");
-                DatosMovimiento datos = {p.codigo, "BAJA", 0, usuarioActual, "Baja lógica de prenda"};
-                agregarMovimiento(datos);
+                Movimiento mov = {p.codigo, "BAJA", 0, usuarioActual, "", "Baja lógica de prenda"};
+                registrarMovimiento(mov);
             } else if (tipoBaja == 'f' || tipoBaja == 'F') {
                 // baja física: no la escribe, la elimina
                 printf("Prenda eliminada definitivamente (baja física).\n");
-                DatosMovimiento datos = {p.codigo, "ELIMINACION", 0, usuarioActual, "Baja física de prenda"};
-                agregarMovimiento(datos);
+                Movimiento mov = {p.codigo, "ELIMINACION", 0, usuarioActual, "", "Baja física de prenda"};
+                registrarMovimiento(mov);
             } else {
-                // Opción inválida, vuelve a escribir la línea original
+                // opción inválida, vuelve a escribir la línea original
                 fprintf(f, "%s\n", lineas[i]);
                 printf("Opción inválida. No se realizó ninguna baja.\n");
             }
@@ -243,8 +243,8 @@ void habilitarPrenda() {
         }
         fclose(f);
         printf("Prenda habilitada con éxito.\n");
-        DatosMovimiento datos = {codigo, "HABILITACION", 0, usuarioActual, "Prenda habilitada"};
-        agregarMovimiento(datos);
+        Movimiento mov = {codigo, "HABILITACION", 0, usuarioActual, "", "Prenda habilitada"};
+        registrarMovimiento(mov);
     } else {
         printf("Prenda no encontrada o ya activa.\n");
     }
@@ -280,7 +280,7 @@ void modificarPrenda() {
             scanf("%d", &opcion);
             limpiarBuffer();
 
-            DatosMovimiento datos;
+            Movimiento mov;
 
             switch (opcion) {
                 case 1:
@@ -288,24 +288,24 @@ void modificarPrenda() {
                     fgets(p.nombre, sizeof(p.nombre), stdin);
                     p.nombre[strcspn(p.nombre, "\n")] = 0;
                     if (strlen(p.nombre) == 0) strcpy(p.nombre, "SinNombre");
-                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de nombre"};
-                    agregarMovimiento(datos);
+                    mov = (Movimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "", "Modificación de nombre"};
+                    registrarMovimiento(mov);
                     break;
                 case 2:
                     printf("Color actual: %s\nNuevo color: ", p.color);
                     fgets(p.color, sizeof(p.color), stdin);
                     p.color[strcspn(p.color, "\n")] = 0;
                     if (strlen(p.color) == 0) strcpy(p.color, "SinColor");
-                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de color"};
-                    agregarMovimiento(datos);
+                    mov = (Movimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "", "Modificación de color"};
+                    registrarMovimiento(mov);
                     break;
                 case 3:
                     printf("Talle actual: %s\nNuevo talle: ", p.talle);
                     fgets(p.talle, sizeof(p.talle), stdin);
                     p.talle[strcspn(p.talle, "\n")] = 0;
                     if (strlen(p.talle) == 0) strcpy(p.talle, "SinTalle");
-                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de talle"};
-                    agregarMovimiento(datos);
+                    mov = (Movimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "", "Modificación de talle"};
+                    registrarMovimiento(mov);
                     break;
                 case 4: {
                     int nuevoStock, stockAnterior = p.stock;
@@ -318,31 +318,31 @@ void modificarPrenda() {
                     }
                     p.stock = nuevoStock;
                     int diferencia = nuevoStock - stockAnterior;
-                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", diferencia, usuarioActual, "Modificación de stock"};
-                    agregarMovimiento(datos);
+                    mov = (Movimiento){p.codigo, "MODIFICACION", diferencia, usuarioActual, "", "Modificación de stock"};
+                    registrarMovimiento(mov);
                     break;
                 }
                 case 5:
                     printf("Costo actual: %.2f\nNuevo costo: ", p.costo);
                     scanf("%f", &p.costo);
                     limpiarBuffer();
-                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de costo"};
-                    agregarMovimiento(datos);
+                    mov = (Movimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "", "Modificación de costo"};
+                    registrarMovimiento(mov);
                     break;
                 case 6:
                     printf("Precio actual: %.2f\nNuevo precio: ", p.precio);
                     scanf("%f", &p.precio);
                     limpiarBuffer();
-                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de precio"};
-                    agregarMovimiento(datos);
+                    mov = (Movimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "", "Modificación de precio"};
+                    registrarMovimiento(mov);
                     break;
                 case 7:
                     printf("Foto actual: %s\nNueva foto: ", p.foto);
                     fgets(p.foto, sizeof(p.foto), stdin);
                     p.foto[strcspn(p.foto, "\n")] = 0;
                     if (strlen(p.foto) == 0) strcpy(p.foto, "SinFoto");
-                    datos = (DatosMovimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "Modificación de foto"};
-                    agregarMovimiento(datos);
+                    mov = (Movimiento){p.codigo, "MODIFICACION", 0, usuarioActual, "", "Modificación de foto"};
+                    registrarMovimiento(mov);
                     break;
                 default:
                     printf("Opción inválida.\n");

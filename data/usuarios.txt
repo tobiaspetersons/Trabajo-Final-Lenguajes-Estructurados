@@ -1,2 +1,2 @@
 admin,admin,1,1
-tobi,tobi,1,1,
+tobi,tobi,1,0

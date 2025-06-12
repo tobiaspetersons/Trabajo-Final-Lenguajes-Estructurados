@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include "utils.h"
 
 int guardarLinea(const char *ruta, const char *linea) {

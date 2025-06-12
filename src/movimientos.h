@@ -3,23 +3,14 @@
 
 typedef struct {
     int codigoPrenda;
-    char tipo[20];
-    int cantidad;
-    char usuario[50];
-    char fecha[20];
-    char detalle[100];
-} Movimiento;
-
-typedef struct {
-    int codigoPrenda;
     const char *tipo;
     int cantidad;
     const char *usuario;
+    char fecha[20];
     const char *detalle;
-} DatosMovimiento;
+} Movimiento;
 
 void registrarMovimiento(Movimiento mov);
-void agregarMovimiento(DatosMovimiento datos);
 void listarMovimientos();
 
 

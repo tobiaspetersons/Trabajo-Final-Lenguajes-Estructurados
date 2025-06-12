@@ -18,20 +18,6 @@ void registrarMovimiento(Movimiento mov) {
     fclose(f);
 }
 
-void agregarMovimiento(DatosMovimiento datos) {
-    Movimiento mov;
-    mov.codigoPrenda = datos.codigoPrenda;
-    strncpy(mov.tipo, datos.tipo, sizeof(mov.tipo));
-    mov.tipo[sizeof(mov.tipo)-1] = '\0';
-    mov.cantidad = datos.cantidad;
-    strncpy(mov.usuario, datos.usuario, sizeof(mov.usuario));
-    mov.usuario[sizeof(mov.usuario)-1] = '\0';
-    mov.fecha[0] = 0;
-    strncpy(mov.detalle, datos.detalle, sizeof(mov.detalle));
-    mov.detalle[sizeof(mov.detalle)-1] = '\0';
-    registrarMovimiento(mov);
-}
-
 void listarMovimientos() {
     limpiarConsola();
     FILE *f = fopen("data/movimientos.txt", "r");
